@@ -1,4 +1,4 @@
 ﻿{
-  "PathFrom": "C:/from",
+  "PathFrom": ["C:/from1"],
   "PathTo": "C:/to"
 }

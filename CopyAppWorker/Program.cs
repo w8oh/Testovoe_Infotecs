@@ -1,5 +1,5 @@
 using CopyAppWorker;
-using CopyAppWorker.Archive.interfaces;
+using CopyAppWorker.Archive.Interfaces;
 using CopyAppWorker.Archive.Services;
 using CopyAppWorker.Copy.Interfaces;
 using CopyAppWorker.Copy.Services;
