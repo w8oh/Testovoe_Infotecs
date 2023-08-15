@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\CopyAppWorker.Settings\CopyAppWorker.Settings.csproj" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.VisualBasic" Version="10.4.0-preview.18571.3" />
+    </ItemGroup>
+
+</Project>
