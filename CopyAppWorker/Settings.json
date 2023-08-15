@@ -1,4 +1,5 @@
 ﻿{
-  "PathFrom": "C:/from1",
-  "PathTo": "C:/to"
+  "PathFrom": ["C:/from1", "C:/from2"],
+  "PathTo": "C:/to",
+  "FileTypes": ["*.txt", "*.docx"]
 }

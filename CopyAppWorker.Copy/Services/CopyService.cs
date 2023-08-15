@@ -16,34 +16,45 @@ public class CopyService : ICopyService
     public async Task<String> ToCopy() 
     {
         
-        SettingsModel paths = await _settingsService.GetSettings();
-        string pathFrom = paths.PathFrom;
+        SettingsModel settings = await _settingsService.GetSettings();
+        string[] pathFrom = settings.PathFrom;
         
         DateTime today = DateTime.Now;
 
-        string NewPath = paths.PathTo + "/" + today.ToString("dd.mm.yy hh-mm-ss");
+        string NewPath = settings.PathTo + "/" + today.ToString("dd.mm.yy hh-mm-ss");
         
         if (!Directory.Exists(NewPath))
         {
             Directory.CreateDirectory(NewPath);
         }
 
-        try 
-        {
-            foreach (string dirPath in Directory.GetDirectories(pathFrom, "*", SearchOption.AllDirectories)) {
-                Directory.CreateDirectory(dirPath.Replace(pathFrom, NewPath));
-            }
+        foreach (string currentPathFrom in pathFrom) {
+            try 
+            {
+                foreach (string dirPath in Directory.GetDirectories(currentPathFrom, "*", SearchOption.AllDirectories)) {
+                    Directory.CreateDirectory(dirPath.Replace(currentPathFrom, NewPath));
+                }
 
-            foreach (string newPath in Directory.GetFiles(pathFrom, "*.*", SearchOption.AllDirectories)) {
-                File.Copy(newPath, newPath.Replace(pathFrom, NewPath), true);
+                foreach (string type in settings.FileTypes) {
+                    foreach (string newPath in Directory.GetFiles(currentPathFrom, type, SearchOption.AllDirectories)) {
+                        File.Copy(newPath, newPath.Replace(currentPathFrom, NewPath), true);
+                    }
+                }
+            } 
+            catch (DirectoryNotFoundException dirNotFound) {
+                Console.WriteLine(dirNotFound.Message);
+            } 
+            catch (UnauthorizedAccessException unAuth) {
+                Console.WriteLine(unAuth.Message);
             }
-        } 
-        catch (DirectoryNotFoundException dirNotFound) {
-            Console.WriteLine(dirNotFound.Message);
-        } 
-        catch (UnauthorizedAccessException unAuth) {
-            Console.WriteLine(unAuth.Message);
+            catch (IOException io) {
+                Console.WriteLine(io.Message);
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
         }
+     
         
         return NewPath;
     } 
