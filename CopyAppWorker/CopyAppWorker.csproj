@@ -22,6 +22,7 @@
     <ItemGroup>
       <ProjectReference Include="..\CopyAppWorker.Archive\CopyAppWorker.Archive.csproj" />
       <ProjectReference Include="..\CopyAppWorker.Copy\CopyAppWorker.Copy.csproj" />
+      <ProjectReference Include="..\CopyAppWorker.Logging\CopyAppWorker.Logging.csproj" />
       <ProjectReference Include="..\CopyAppWorker.Settings\CopyAppWorker.Settings.csproj" />
     </ItemGroup>
 </Project>

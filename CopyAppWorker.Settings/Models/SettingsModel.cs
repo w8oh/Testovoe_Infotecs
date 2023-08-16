@@ -6,4 +6,6 @@ public class SettingsModel
     public string PathTo { get; set; }
     
     public string[] FileTypes { get; set; }
+    
+    public string[] LogTypes { get; set; }
 }

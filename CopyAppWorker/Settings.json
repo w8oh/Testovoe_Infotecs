@@ -1,5 +1,6 @@
 ﻿{
   "PathFrom": ["C:/from1", "C:/from2"],
   "PathTo": "C:/to",
-  "FileTypes": ["*.txt", "*.docx"]
+  "FileTypes": ["*.txt", "*.docx"],
+  "LogTypes": ["Info", "Debug", "Error"]
 }

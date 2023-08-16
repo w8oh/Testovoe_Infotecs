@@ -10,7 +10,7 @@ public class CopyService : ICopyService
 
     public CopyService(ISettingsService settingsService)
     {
-        _settingsService = settingsService;
+        _settingsService = settingsService; 
     }
 
     public async Task<String> ToCopy() 
@@ -18,26 +18,24 @@ public class CopyService : ICopyService
         
         SettingsModel settings = await _settingsService.GetSettings();
         string[] pathFrom = settings.PathFrom;
-        
-        DateTime today = DateTime.Now;
 
-        string NewPath = settings.PathTo + "/" + today.ToString("dd.mm.yy hh-mm-ss");
+        string newPathTo = settings.PathTo + "/" + DateTime.Now.ToString("dd.MM.yy HH-mm-ss");
         
-        if (!Directory.Exists(NewPath))
+        if (!Directory.Exists(newPathTo))
         {
-            Directory.CreateDirectory(NewPath);
+            Directory.CreateDirectory(newPathTo);
         }
 
         foreach (string currentPathFrom in pathFrom) {
             try 
             {
                 foreach (string dirPath in Directory.GetDirectories(currentPathFrom, "*", SearchOption.AllDirectories)) {
-                    Directory.CreateDirectory(dirPath.Replace(currentPathFrom, NewPath));
+                    Directory.CreateDirectory(dirPath.Replace(currentPathFrom, newPathTo));
                 }
 
                 foreach (string type in settings.FileTypes) {
                     foreach (string newPath in Directory.GetFiles(currentPathFrom, type, SearchOption.AllDirectories)) {
-                        File.Copy(newPath, newPath.Replace(currentPathFrom, NewPath), true);
+                        File.Copy(newPath, newPath.Replace(currentPathFrom, newPathTo), true);
                     }
                 }
             } 
@@ -56,6 +54,6 @@ public class CopyService : ICopyService
         }
      
         
-        return NewPath;
+        return newPathTo;
     } 
 }
