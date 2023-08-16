@@ -5,9 +5,9 @@ using CopyAppWorker.Settings.Models;
 
 namespace CopyAppWorker.Logging.Services;
 
-public class LoggingService: ILoggingService
+public class LoggingService : ILoggingService
 {
-    private readonly List<LogTypes> _logTypes;
+    private readonly List<LogTypes> _logTypes = new();
     private readonly ISettingsService _settingsService;
     private string LogFilePath;
 
@@ -19,98 +19,85 @@ public class LoggingService: ILoggingService
         List<string> logTypes = s.LogTypes.ToList();
         SelectLogTypes(logTypes);
     }
-    
+
     public void DirectoryFile()
     {
-        
         var directory = new DirectoryInfo($"{System.IO.Directory.GetCurrentDirectory()}/Logs");
         var file = new FileInfo(System.IO.Directory.GetCurrentDirectory() + "/Logs/" + DateTime.Now.ToString("dd.MM.yy HH.mm.ss") + ".txt");
 
-        try 
-        {
-            if (!directory.Exists)
-            {
+        try {
+            if (!directory.Exists) {
                 directory.Create();
             }
 
-            if (!file.Exists) 
-            {
-                file.Create();
+            if (!file.Exists) {
+                var fs = file.Create();
+                fs.Close();
             }
-        }
-        catch ( Exception e)
-        {
+        } catch (Exception e) {
             Console.WriteLine("Directory or file was not created");
             throw;
         }
-        
+
         LogFilePath = file.FullName;
     }
-    
-    
+
     private void SelectLogTypes(List<string> logTypes)
     {
-        if (logTypes == null)
-        {
+        if (logTypes == null) {
             throw new ArgumentNullException(nameof(logTypes));
         }
-       
-        if (logTypes.Contains("Info"))
-        {
+
+        if (logTypes.Contains("Info")) {
             _logTypes.Add(LogTypes.Info);
         }
-       
-        if (logTypes.Contains("Debug"))
-        {
+
+        if (logTypes.Contains("Debug")) {
             _logTypes.Add(LogTypes.Debug);
         }
-       
-        if (logTypes.Contains("Error"))
-        {
+
+        if (logTypes.Contains("Error")) {
             _logTypes.Add(LogTypes.Error);
         }
     }
-    
+
     public void ToLog(string log, LogTypes logType)
     {
         if (!_logTypes.Contains(logType)) return;
-        
+
         var logWriter = new StringBuilder();
-        
-        switch (logType)
-        {
+
+        switch (logType) {
             case LogTypes.Info:
-                logWriter.Append($"Info: {log}"); 
+                logWriter.Append($"Info: {log}\n");
                 break;
             case LogTypes.Debug:
-                logWriter.Append($"Debug: {log}");
+                logWriter.Append($"Debug: {log}\n");
                 break;
             case LogTypes.Error:
-                logWriter.Append($"Error: {log}");
+                logWriter.Append($"Error: {log}\n");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
         }
 
-        if (logWriter.Length != 0)
-        {
+        if (logWriter.Length != 0) {
             File.AppendAllText(LogFilePath, logWriter.ToString());
         }
     }
-    
+
     public void InfoLog(string log)
     {
         ToLog(log, LogTypes.Info);
     }
-    
+
     public void DebugLog(string log)
     {
         ToLog(log, LogTypes.Debug);
     }
-    
+
     public void ErrorLog(string log)
     {
         ToLog(log, LogTypes.Error);
     }
-    
 }

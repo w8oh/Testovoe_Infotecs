@@ -9,6 +9,7 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\CopyAppWorker.Logging\CopyAppWorker.Logging.csproj" />
       <ProjectReference Include="..\CopyAppWorker.Settings\CopyAppWorker.Settings.csproj" />
     </ItemGroup>
 

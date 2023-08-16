@@ -7,14 +7,12 @@ namespace CopyAppWorker;
 
 public class Worker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
     private readonly ILoggingService _loggingService;
     private readonly ICopyService _copyService;
     private readonly IArchiveService _archiveService;
 
-    public Worker(ILogger<Worker> logger, ICopyService copyService, IArchiveService archiveService, ILoggingService loggingService)
+    public Worker(ICopyService copyService, IArchiveService archiveService, ILoggingService loggingService)
     {
-        _logger = logger;
         _loggingService = loggingService;
         _copyService = copyService;
         _archiveService = archiveService;
@@ -22,8 +20,10 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-       // _loggingService.ToLog();
-        string toArchive = await  _copyService.ToCopy();
+        _loggingService.InfoLog("Application started");
+        string toArchive = await _copyService.ToCopy();
         _archiveService.ToArchive(toArchive);
+        _loggingService.InfoLog("Application finished");
+        Environment.Exit(0);
     }
 }
