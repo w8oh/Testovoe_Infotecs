@@ -8,12 +8,12 @@ namespace CopyAppWorker.Logging.Services;
 public class LoggingService: ILoggingService
 {
     private readonly List<LogTypes> _logTypes;
-    private string LogFilePath;
-    
     private readonly ISettingsService _settingsService;
+    private string LogFilePath;
 
     public LoggingService(ISettingsService settingsService)
     {
+        DirectoryFile();
         _settingsService = settingsService;
         var s = _settingsService.GetSettings().Result;
         List<string> logTypes = s.LogTypes.ToList();
@@ -94,8 +94,23 @@ public class LoggingService: ILoggingService
 
         if (logWriter.Length != 0)
         {
-            // запись в файл
+            File.AppendAllText(LogFilePath, logWriter.ToString());
         }
+    }
+    
+    public void InfoLog(string log)
+    {
+        ToLog(log, LogTypes.Info);
+    }
+    
+    public void DebugLog(string log)
+    {
+        ToLog(log, LogTypes.Debug);
+    }
+    
+    public void ErrorLog(string log)
+    {
+        ToLog(log, LogTypes.Error);
     }
     
 }
